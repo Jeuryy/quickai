@@ -1,7 +1,8 @@
-const LayoutPage = ({children}: {children: React.ReactNode}) => {
+const LayoutPage = () => {
   return (
     <div>
-      {children}
+      AI main page
+      (Probably dashboard)
     </div>
   )
 }

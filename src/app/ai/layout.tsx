@@ -1,9 +1,8 @@
-import Navbar from "@/components/Navbar"
 
 const Layout = ({children}: {children: React.ReactNode}) => {
   return (
     <div>
-        <Navbar/>
+      AI Layout
         {children}
     </div>
   )

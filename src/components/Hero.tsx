@@ -1,6 +1,7 @@
 "use client"
+import { assets } from '@/assets/assets';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import React from 'react'
 
 const Hero = () => {
         const navigate = useRouter();
@@ -34,6 +35,10 @@ const Hero = () => {
             active:scale-95 transition cursor-pointer'>
                 Watch demo
             </button>
+        </div>
+        <div className='flex items-center gap-4 mt-8 mx-auto text-gray-600'>
+            <Image src={assets.user_group} alt=''
+            className='h-8 w-auto'/> Trusted by 10k+ people
         </div>
     </div>
   )
