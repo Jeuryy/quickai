@@ -58,7 +58,7 @@ const Sidebar = ({sidebar, setSidebar}: Props) => {
                 <div>
                     <h1 className='text-sm font-medium'>{user?.user?.fullName}</h1>
                     <p className='text-xs text-gray-500'>
-                        <Protect plan="premium" fallback="Free">Premium </Protect>
+                        <Protect plan="premium" fallback="Free">Premium</Protect>
                         Plan
                     </p>
                 </div>
