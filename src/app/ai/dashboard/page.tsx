@@ -1,9 +1,10 @@
 import React from 'react'
+import LayoutPage from '../page'
 
 const Dashboard = () => {
   return (
     <div>
-        Dashboard page
+        <LayoutPage/>
     </div>
   )
 }
