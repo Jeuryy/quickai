@@ -5,18 +5,13 @@ import Hero from "@/components/Hero";
 import Navbar from "@/components/Navbar";
 import Plan from "@/components/Plan";
 import Testimonial from "@/components/Testimonials";
-import { useAuth } from "@clerk/nextjs";
-import { useEffect } from "react";
+import {Toaster} from "react-hot-toast"
 
 export default function Home() {
 
-  const {getToken} = useAuth();
-  useEffect(()=> {
-    getToken().then((token)=>console.log(token));
-  }, [])
-
   return (
     <>
+        <Toaster/>
         <Navbar/>
         <Hero/>
         <AiTools/>

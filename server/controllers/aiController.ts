@@ -4,11 +4,14 @@ import { clerkClient } from "@clerk/express";
 import axios from "axios"
 import {v2 as cloudinary} from "cloudinary"
 import fs from "fs"
-import pdf from "pdf-parse"
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url)
+const pdf = require("pdf-parse")
 
 const AI = new OpenAI({
     apiKey: process.env.GEMINI_API_KEY,
-    baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/"
+    baseURL: "https://generativelanguage.googleapis.com/v1beta/openai"
 });
 
 
@@ -24,9 +27,10 @@ export const generateArticle = async (req, res) => {
             return res.json({success: false, 
                 message: "Limit reachedd. Upgrade to continue."
             })
-        }
+        }      
+        
         const response = await AI.chat.completions.create({
-            model: "gemini-2.0-flash",
+            model: "gemini-2.5-flash",
             messages: [
                 {
                     role: "user",
@@ -34,10 +38,11 @@ export const generateArticle = async (req, res) => {
                 },
             ],
             temperature: 0.7,
-            max_tokens: length,
+            max_tokens: length.length,
+            top_p: 0.95
         });
 
-        const content = response.choices[0].message.content
+        const content = response?.choices?.[0]?.message?.content
 
         await sql` INSERT INTO creations (user_id, prompt, content, type) 
         VALUES (${userId}, ${prompt}, ${content}, 'article')`;
@@ -54,8 +59,9 @@ export const generateArticle = async (req, res) => {
 
 
         } catch (error) {
-            console.log(error.message)
-            res.json({success: false, message: error.message})
+            const err = error as Error
+            console.log(err.message)
+            res.json({success: false, message: err.message})
         }
 }
 
@@ -73,7 +79,7 @@ export const generateBlogTitle = async (req, res) => {
             })
         }
         const response = await AI.chat.completions.create({
-            model: "gemini-2.0-flash",
+            model: "gemini-2.5-flash",
             messages: [
                 {
                     role: "user",
@@ -245,7 +251,7 @@ export const resumeReview = async (req, res) => {
         Resume Content:\n\n${pdfData.text}`
 
         const response = await AI.chat.completions.create({
-            model: "gemini-2.0-flash",
+            model: "gemini-2.5-flash",
             messages: [{role: "user", content: prompt,}],
             temperature: 0.7,
             max_tokens: 1000,
