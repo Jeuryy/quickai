@@ -5,6 +5,7 @@ import axios from "axios"
 import {v2 as cloudinary} from "cloudinary"
 import fs from "fs"
 import { createRequire } from "module";
+import { Request, Response } from "express";
 
 const AI = new OpenAI({
     apiKey: process.env.GEMINI_API_KEY,

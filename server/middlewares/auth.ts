@@ -1,6 +1,5 @@
 import { clerkClient } from "@clerk/express";
 
-
 //Middleware to ceck userID and Premiumplan
 
 
