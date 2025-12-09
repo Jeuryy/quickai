@@ -2,10 +2,10 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "server.ts",
+  "main": "server.js",
   "scripts": {
-    "dev": "nodemon --watch ./ --exec ts-node-esm server.ts",
-    "start": "node dist/server.js"
+    "dev": "nodemon server.js",
+    "start": "node server.js"
     
   },
   "keywords": [],
