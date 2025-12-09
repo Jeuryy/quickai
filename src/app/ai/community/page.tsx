@@ -1,17 +1,52 @@
 "use client"
-import { dummyPublishedCreationData } from '@/assets/assets';
-import { useUser } from '@clerk/nextjs';
+import { useAuth, useUser } from '@clerk/nextjs';
+import axios from 'axios';
 import { Heart } from 'lucide-react';
-import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
+import toast, { Toaster } from 'react-hot-toast';
+
+axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_URL;
 
 const Community = () => {
   const [creations, setCreations] = useState([]);
   const {user} = useUser();
+  const [loading, setLoading] = useState(true)
+  const {getToken} = useAuth();
+
 
   const fetchCreations = async () => {
-    setCreations(dummyPublishedCreationData);
-  }
+    try {
+      const {data} = await axios.get('api/user/get-published-creations', {
+        headers: {Authorization: `Bearer ${await getToken()}`}
+      })
+      if (data.success) {
+        setCreations(data.creations)
+      } else {
+        toast.error(data.message)
+      }
+    } catch (error) {
+      const err = error as Error
+      toast.error(err.message)
+    }
+    setLoading(false)
+   }
+
+   const imageLikeToggle = async (id) => {
+      try {
+        const {data} = await axios.post('api/user/get-published-creations',{id}, {
+            headers: {Authorization: `Bearer ${await getToken()}`}
+        })
+        if (data.success) {
+          toast.success(data.message)
+          await fetchCreations()
+        } else {
+            toast.error(data.message)
+        }
+      } catch (error) {
+      const err = error as Error
+      toast.error(err.message)
+      }
+   }
 
   useEffect( () => {
     if(user){
@@ -21,17 +56,18 @@ const Community = () => {
 
   return (
     <div className='flex-1 h-full flex flex-col fap-4 p-6'>
+      <Toaster/>
         Creations
         <div className='bg-white h-full w-full rounded-xl overflow-y-scroll'>
           {creations.map((creation, index) => (
             <div key={index} className='relative group inline-block pl-3 pt-3 w-full sm:max-w-1/2 lg:max-w-1/3'>
-              <Image src={creation.content} alt='' className='w-full h-full object-cover rounded-lg'/>
+              <img src={creation.content} alt='' className='w-full h-full object-cover rounded-lg'/>
 
               <div className='absolute bottom-0 top-0 right-0 left-3 flex gap-2 items-end justify-end group-hover:justify-between p-3 group-hover:bg-linear-to-b from-transparent to-black/80 text-white rounded-lg'>
                 <p className='text-sm hidden group-hover:block'>{creation.prompt}</p>
                 <div className='flex gap-1 items-center'>
                   <p>{creation.likes.length}</p>
-                  <Heart className={`min-w-5 h-5 hover:scale-110 cursor-pointer 
+                  <Heart onClick={() => imageLikeToggle(creation.id)} className={`min-w-5 h-5 hover:scale-110 cursor-pointer 
                     ${creation.likes.includes(user.id)
                       ? 'fill-red-500 text-red-600'
                       : 'text-white'

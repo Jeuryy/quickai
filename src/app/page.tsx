@@ -11,7 +11,7 @@ export default function Home() {
 
   return (
     <>
-        <Toaster/>
+        <Toaster position="top-center"/>
         <Navbar/>
         <Hero/>
         <AiTools/>

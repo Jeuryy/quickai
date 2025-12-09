@@ -6,14 +6,16 @@ import {v2 as cloudinary} from "cloudinary"
 import fs from "fs"
 import { createRequire } from "module";
 
-const require = createRequire(import.meta.url)
-const pdf = require("pdf-parse")
-
 const AI = new OpenAI({
     apiKey: process.env.GEMINI_API_KEY,
     baseURL: "https://generativelanguage.googleapis.com/v1beta/openai"
 });
 
+const require = createRequire(import.meta.url);
+const pdf = require("pdf-parse");
+
+//console.log(pdf);
+//        console.dir(response, { depth: null });
 
 //Generate article
 export const generateArticle = async (req, res) => {
@@ -87,10 +89,10 @@ export const generateBlogTitle = async (req, res) => {
                 }
             ],
             temperature: 0.7,
-            max_tokens: 100,
+            max_tokens: 2000,
         });
 
-        const content = response.choices[0].message.content
+        const content = response?.choices?.[0]?.message?.content
 
         await sql` INSERT INTO creations (user_id, prompt, content, type) 
         VALUES (${userId}, ${prompt}, ${content}, 'blog-title')`;
@@ -156,7 +158,7 @@ export const generateImage = async (req, res) => {
 export const removeImageBackground = async (req, res) => {
     try {
         const {userId} = req.auth();
-        const {image} = req.file;
+        const image = req.file;
         const plan = req.plan;
 
         if (plan !== 'premium') {
@@ -194,7 +196,7 @@ export const removeImageObject = async (req, res) => {
     try {
         const {userId} = req.auth();
         const {object} = req.body;
-        const {image} = req.file;
+        const image = req.file;
         const plan = req.plan;
 
         if (plan !== 'premium') {
@@ -210,7 +212,7 @@ export const removeImageObject = async (req, res) => {
             transformation:  [{
                 effect: `gen_remove:${object}`
             }],
-            rsource_type: 'image'
+            resource_type: 'image'
         })
 
         await sql` INSERT INTO creations (user_id, prompt, content, type) 
@@ -247,14 +249,14 @@ export const resumeReview = async (req, res) => {
         const dataBuffer = fs.readFileSync(resume.path)
         const pdfData = await pdf(dataBuffer);
 
-        const prompt = `Review the following resume and provide constructive feedback on its strengths, weaknesses, and areas for improevement.
+        const prompt = `Review the following resume and provide constructive feedback on its strengths, weaknesses, and areas for improvement. Provide in the same resume language.
         Resume Content:\n\n${pdfData.text}`
 
         const response = await AI.chat.completions.create({
             model: "gemini-2.5-flash",
             messages: [{role: "user", content: prompt,}],
             temperature: 0.7,
-            max_tokens: 1000,
+            max_tokens: 3000,
         });
 
         const content = response.choices[0].message.content;

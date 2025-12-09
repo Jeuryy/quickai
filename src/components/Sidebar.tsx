@@ -2,6 +2,7 @@ import { Protect, useClerk, useUser } from '@clerk/nextjs'
 import { Eraser, FileText, Hash, House, Image, LogOut, Scissors, SquarePen, Users } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useSubscription } from '@clerk/nextjs/experimental';
 
 type Props = {
     sidebar: boolean;
@@ -23,7 +24,7 @@ const Sidebar = ({sidebar, setSidebar}: Props) => {
     const user = useUser();
     const {signOut, openUserProfile} = useClerk();
     const pathname = usePathname();
-
+    const {data: subscription} = useSubscription()
 
   return (
     <div className={`w-60 bg-white border-r border-gray-200 flex flex-col justify-between items-center max-sm:absolute top-14 bottom-0
@@ -58,8 +59,8 @@ const Sidebar = ({sidebar, setSidebar}: Props) => {
                 <div>
                     <h1 className='text-sm font-medium'>{user?.user?.fullName}</h1>
                     <p className='text-xs text-gray-500'>
-                        <Protect plan="premium" fallback="Free">Premium</Protect>
-                        Plan
+                        <Protect plan="premium" fallback="Free">{subscription?.subscriptionItems[0].plan.name}  </Protect>
+                        &nbsp;Plan
                     </p>
                 </div>
             </div>

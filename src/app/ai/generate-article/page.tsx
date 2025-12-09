@@ -3,7 +3,7 @@ import { useAuth } from '@clerk/nextjs';
 import axios from 'axios'
 import { Edit, Sparkles } from 'lucide-react'
 import{ useState } from 'react'
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import Markdown from 'react-markdown';
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_API_URL;
@@ -28,7 +28,7 @@ const WriteArticle = () => {
   e.preventDefault();
   try {
     setLoading(true);
-    const prompt = `Write an article about ${input} in ${selectedLength.text}`
+    const prompt = `Write an article about the topic: "${input}" in ${selectedLength.text} in the language the topic was written`
 
     const {data} = await axios.post(`/api/ai/generate-article`, {prompt, 
       length: selectedLength.length}, 
@@ -49,6 +49,7 @@ const WriteArticle = () => {
 
   return (
     <div className='h-full overflow-y-scroll p-6 flex items-start flex-wrap gap-4 text-slate-700'>
+      <Toaster/>
       {/*Left side */}
       <form
         onSubmit={onSubmitHandler} 
