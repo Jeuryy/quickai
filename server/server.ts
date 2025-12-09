@@ -22,7 +22,7 @@ app.use(requireAuth())
 app.use('/api/ai', aiRouter)
 app.use('/api/user', userRouter)
 
-const PORT = process.env.PORT || 5173;
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
     console.log("Server is running on port", PORT);

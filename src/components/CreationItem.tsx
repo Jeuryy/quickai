@@ -26,7 +26,7 @@ const CreationItem = ({item}: Props) => {
                 <div>
                     {item.type === 'image' ? (
                         <div>
-                            <Image src={item.content} alt='Image' className='mt-3 w-full max-w-md'/>
+                            <img src={item.content} alt='Image' className='mt-3 w-full max-w-md'/>
                         </div>
                     ) : (
                         <div className='mt-3 h-full overflow-y-scroll text-sm text-slate-700'>

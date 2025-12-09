@@ -23,6 +23,7 @@ const Community = () => {
         setCreations(data.creations)
       } else {
         toast.error(data.message)
+        console.log(data)
       }
     } catch (error) {
       const err = error as Error
@@ -33,7 +34,7 @@ const Community = () => {
 
    const imageLikeToggle = async (id) => {
       try {
-        const {data} = await axios.post('api/user/get-published-creations',{id}, {
+        const {data} = await axios.post('api/user/toggle-like-creation',{id}, {
             headers: {Authorization: `Bearer ${await getToken()}`}
         })
         if (data.success) {
@@ -54,7 +55,7 @@ const Community = () => {
     }
   },[user])
 
-  return (
+  return !loading ? (
     <div className='flex-1 h-full flex flex-col fap-4 p-6'>
       <Toaster/>
         Creations
@@ -79,6 +80,10 @@ const Community = () => {
             </div>
           ))}
         </div>
+    </div>
+  ) : (
+    <div className='flex justify-center items-center h-full'>
+      <span className='w-10 h-10 my-1 rounded-full border-3 border-primary border-t-transparent animate-spin'></span>
     </div>
   )
 }
