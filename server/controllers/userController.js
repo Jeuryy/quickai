@@ -12,8 +12,7 @@ export const getUserCreations = async (req, res) => {
         res.json({success: true, creations})
 
     } catch (error) {
-        const err = error as Error
-        res.json({success: false, message: err.message})
+        res.json({success: false, message: error.message})
     }
 }
 
@@ -28,8 +27,7 @@ export const getPublishedCreations = async (req, res) => {
         res.json({success: true, creations})
 
     } catch (error) {
-        const err = error as Error
-        res.json({success: false, message: err.message})
+        res.json({success: false, message: error.message})
     }
 }
 
@@ -52,7 +50,7 @@ export const toggleLikeCreation = async (req, res) => {
         let message;
 
         if (currentLikes.includes(userIdStr)) {
-            updatedLikes = currentLikes.filter((user: unknown) => user !== userIdStr);
+            updatedLikes = currentLikes.filter((user) => user !== userIdStr);
             message = 'Creation Unliked'
         } else {
             updatedLikes = [...currentLikes, userIdStr]
@@ -67,7 +65,6 @@ export const toggleLikeCreation = async (req, res) => {
         res.json({success: true, message});
 
     } catch (error) {
-        const err = error as Error
-        res.json({success: false, message: err.message})
+        res.json({success: false, message: error.message})
     }
 }
