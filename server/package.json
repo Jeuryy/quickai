@@ -4,7 +4,10 @@
   "description": "",
   "main": "server.ts",
   "scripts": {
-    "dev": "nodemon --watch ./ --exec ts-node-esm server.ts"
+    "dev": "nodemon --watch ./ --exec ts-node-esm server.ts",
+    "build": "tsc",
+    "start": "node build/server.js"
+    
   },
   "keywords": [],
   "author": "",

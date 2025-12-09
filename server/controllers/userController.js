@@ -1,4 +1,4 @@
-import sql from "../configs/db.ts";
+import sql from "../configs/db.js";
 
 
 export const getUserCreations = async (req, res) => {
